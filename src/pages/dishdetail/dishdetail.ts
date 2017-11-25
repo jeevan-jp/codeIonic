@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Dish } from '../../shared/dish';
+import { Comment } from '../../shared/comment';
 
 /**
  * Generated class for the DishdetailPage page.
@@ -15,7 +17,18 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class DishdetailPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  dish: Dish;
+  errMess: string;
+  avgstars: string;
+  numcomments: number;
+
+  constructor(public navCtrl: NavController, public navParams: NavParams,
+    @Inject('BaseUrl') private BaseUrl) {
+    this.dish = navParams.get('dish');
+    this.numcomments = this.dish.comments.length;
+    let total = 0;
+    this.dish.comments.forEach(comment => total += comment.rating );
+    this.avgstars = (total/this.numcomments).toFixed(2);
   }
 
   ionViewDidLoad() {
